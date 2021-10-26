@@ -1,6 +1,31 @@
 <?Php
 require_once 'phpquery.Php';
 
+
+
+
+$link="https://search.ipaustralia.gov.au/trademarks/search/result?s=397def87-66e5-4514-b0e9-a816c1deea44";
+
+
+
+$html = file_get_contents($link);
+$doc = phpquery::newdocument($html);
+
+
+
+
+$tbody = $doc->find('a.button.green.no-fill.square.goto-last-page');
+
+
+
+		$pqid = pq($tbody); 
+		$Maxpage = $pqid->attr("data-gotopage");
+		
+	
+
+
+
+$text=[];
 $num=[];
 $number=[];
 $logo_url=[];
@@ -11,11 +36,15 @@ $status2=[];
 $details_page_url=[];
 
 
-for($m=0;$m<9;$m++){
+
+
+
+
+for($m=0;$m<$Maxpage+1;$m++){
 
 $link="https://search.ipaustralia.gov.au/trademarks/search/result?s=397def87-66e5-4514-b0e9-a816c1deea44&p=".$m;
 
-echo $link."<Br>";
+
 
 $html = file_get_contents($link);
 $doc = phpquery::newdocument($html);
@@ -91,11 +120,14 @@ foreach ($tbody as $id) {
 
        $td4 = $tbody->find('td.trademark.words');
 
+       $str=$td4->html();
+
+       $str = str_replace("<br>", "", $str);
 
 	
 	
 		
-	      $name[] = $td4->html();
+	      $name[] = $str;
 
 
 
@@ -162,51 +194,6 @@ $i=0;
 
 print_r($arr);
 
-
-
-/*
-
-
-
-
-
-print_r($num);	
-
-echo "<br><br><br>";
-
-print_r($number);	
-
-echo "<br><br><br>";
-
-print_r($logo_url);
-
-echo "<br><br><br>";
-
-print_r($name);
-echo "<br><br><br>";
-
-print_r($classes);
-	
-
-echo "<br><br><br>";
-
-print_r($status1);
-	
-
-echo "<br><br><br>";
-
-
-print_r($status2);
-
-echo "<br><br><br>";
-
-print_r($details_page_url);
-
-echo "<br><br><br>";
-
-echo "<br>++++++++++++++++++++++++++++++++";
-
-*/
 
 ?>
 
